@@ -83,8 +83,8 @@ To change the player:
 
 ## Usage
 
-* Home tab: Browse your full category (Video order is dictated by Video's ID field in alphabetical order)
-* Search tab: Hidden until a query is made, returns a grid view of videos that match your query (favors title, uploader, description, (youtube) tags, (youtube) category, (filesystem) category, and fallsback to file path in order)
+* Home tab: Browse your full catalog (Video order is dictated by Video's ID field in alphabetical order)
+* Search tab: Hidden until a query is made, returns a grid view of videos that match your query (favors title, uploader, description, (youtube) tags, (youtube) category, (filesystem) category, and falls back to filepath, in that order)
 * Queue tab: Each video in the above tabs has a "+" button in the bottom right to add that video to your session's queue. This enables playlist-like playback within the external video players. Queue tab is hidden until queue has at least one video. You can save a queue to a .m3u file to save your "playlist" or play all videos in order.
 * Settings tab: Adjust runtime settings (resolution changes require restart, and settings can be manually edited in `settings.json`). 
 
