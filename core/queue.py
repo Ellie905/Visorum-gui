@@ -76,6 +76,51 @@ class Queue(QObject):
 
         print(f"[queue] saved playlist: {playlist_path}")
 
+    def import_(self, playlist_path: Path, videos):
+        """
+        Load an M3U playlist into the queue.
+
+        Args:
+            playlist_path: Path to .m3u file
+            videos: List of Videos (used to map paths -> Video objects)
+        """
+
+        with open(playlist_path, "r", encoding="utf-8") as f:
+            lines = [line.strip() for line in f if line.strip()]
+
+        if not lines:
+            print("[queue] import: empty playlist")
+            return
+
+        # Build lookup: absolute path -> video
+        # (do this once for performance)
+        path_to_video = {}
+        for v in videos:
+            abs_path = str(self.paths.resolve_video_path(v.path))
+            path_to_video[abs_path] = v
+
+        # Clear existing queue
+        self.videos.clear()
+
+        imported = 0
+        skipped = 0
+
+        for p in lines:
+            video = path_to_video.get(p)
+
+            if video:
+                self.videos.append(video)
+                imported += 1
+            else:
+                skipped += 1
+
+        # Emit signals once at end (not per add)
+        self.queueChanged.emit()
+        if imported > 0:
+            self.becameNonEmpty.emit()
+
+        #print(f"[queue] imported {imported} items ({skipped} skipped)")
+
     # -----------------------------
     # Playback
     # -----------------------------

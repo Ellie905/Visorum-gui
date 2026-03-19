@@ -15,7 +15,7 @@ from core.queue import Queue
 
 
 class MainWindow(QWidget):
-    def __init__(self, videos, paths, on_activate, search_engine, settings):
+    def __init__(self, videos, paths, on_activate, search_engine, settings, path_to_m3u=None):
         super().__init__()
 
         self.videos = list(videos)
@@ -24,6 +24,11 @@ class MainWindow(QWidget):
         self.search_engine = search_engine
         self.settings = settings
         self.queue = Queue(self.paths, self.settings)
+        self.path_to_m3u = path_to_m3u
+
+        # --- CLI Queue Import ---
+        if self.path_to_m3u is not None:
+            self.queue.import_(self.path_to_m3u, self.videos)
 
         # --- Search bar ---
         self.search_view = SearchView()
@@ -58,7 +63,11 @@ class MainWindow(QWidget):
         # --- Queue tab ---
         self.queue_view = QueueView(self.queue, self.paths)
         self.tabs.addTab(self.queue_view, "Queue")
-        self.tabs.setTabVisible(2, False)
+
+        if self.path_to_m3u is not None:
+            self.tabs.setTabVisible(2, True)
+        else:
+            self.tabs.setTabVisible(2, False)
 
         for view in (self.home_view, self.search_results_view):
             view.delegate.addToQueueRequested.connect(self.queue.add)
