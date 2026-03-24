@@ -111,7 +111,7 @@ def build_parser():
     parser.add_argument(
         "--play",
         metavar="VIDEO_ID",
-        help="open video in default player. ex: Visorum --play dQw4w9WgXcQ"
+        help="open video in default player. ex: Visorum --play=dQw4w9WgXcQ"
     )
 
     parser.add_argument(
