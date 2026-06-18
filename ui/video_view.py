@@ -1,8 +1,9 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QListView, QStyleOptionViewItem
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QListView, QStyleOptionViewItem, QPushButton
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor
 from ui.video_model import VideoModel
 from ui.video_delegate import VideoDelegate
+import random
 
 class VideoView(QWidget):
     """
@@ -22,6 +23,11 @@ class VideoView(QWidget):
         self.vid_lbl = QLabel(f"Videos loaded: {len(videos)}")
         self.vid_lbl.setStyleSheet("color: #aaa;")
         self.layout.addWidget(self.vid_lbl)
+
+        # Shuffle button
+        self.shuffle_button = QPushButton("Shuffle")
+        self.shuffle_button.clicked.connect(self.shuffle_vids)
+        self.layout.addWidget(self.shuffle_button)
 
         # QListView
         self.view = QListView()
@@ -52,6 +58,13 @@ class VideoView(QWidget):
         # Connect click
         self.view.clicked.connect(self.on_item_clicked)
 
+    def shuffle_vids(self):
+        random.shuffle(self.videos)
+        #self.render()
+        self.model = VideoModel(self.videos, self.paths)
+        self.view.setModel(self.model)
+        #self.apply_view_mode()
+
     def apply_view_mode(self):
         if self.view_mode == "grid":
             self.view.setViewMode(QListView.IconMode)
@@ -78,7 +91,7 @@ class VideoView(QWidget):
         if video:
             self.on_activate(video)
 
-    def set_videos(self, videos):
+    def set_videos(self, videos): # Orphan?
         self.model.beginResetModel()
         self.model.videos = list(videos)
         self.model.endResetModel()

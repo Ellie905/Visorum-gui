@@ -1,4 +1,4 @@
-import json
+import json, random
 from helpers.normal import format_date, format_number, format_time
 from dataclasses import dataclass
 from pathlib import Path
@@ -50,6 +50,14 @@ class Catalog:
                 path=data.get("path", ""),
                 thumbnail=data.get("thumbnail"),
             )
+
+
+
+    def shuffle(self):
+        items = list(self._videos.items())
+        random.shuffle(items)
+
+        self._videos = dict(items)
 
     def all_videos(self) -> List[Video]:
         return list(self._videos.values())

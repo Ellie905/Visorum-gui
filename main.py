@@ -16,13 +16,13 @@ from core.settings import Settings
 from core.player import Player
 from core.search import SearchEngine
 from ui.main_window import MainWindow
-from ui.home import HomeView
 from ui.search_view import SearchView
 
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 
 
 # Ver_Log ---------------------------
+# - 1.2.0 - Shuffle Added (CLI/GUI)
 # - 1.1.0 - Added CLI Flags
 # - 1.0.0 - Release
 # -----------------------------------
@@ -92,6 +92,12 @@ def build_parser():
         "--all",
         action="store_true",
         help="display all results, negates --limit. ex: Visorum -esa"
+    )
+
+    parser.add_argument(
+        "--shuffle",
+        action="store_true",
+        help="shuffle videos before opening Visorum"
     )
 
     parser.add_argument(
@@ -212,6 +218,11 @@ def main():
     paths = Paths()
     settings = Settings(paths.settings_path)
     catalog = Catalog(paths.catalog_path)
+
+    # Shuffle Logic
+    shuffle = args.shuffle
+    if shuffle is True:
+        catalog.shuffle()
 
     # Q App
     app = QApplication(sys.argv)
